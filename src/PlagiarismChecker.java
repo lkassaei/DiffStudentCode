@@ -15,35 +15,26 @@ public class PlagiarismChecker {
      * @return The length of the longest shared substring.
      */
     public static int longestSharedSubstring(String doc1, String doc2) {
+        // 2D array to implement dynamic programming
+        // Reserves index 0 for base case of an empty string that shares 0 letters
+        int[][] tab =  new int[doc1.length() + 1][doc2.length() + 1];
 
-        // TODO Complete this function to return the length of the longest shared substring.
-        int count = 0;
-        int len = 0;
-        String str1 = "";
-        String str2 = "";
-        if (doc1.length() > doc2.length()) {
-            len = doc2.length();
-            str1 = doc2;
-            str2 = doc1;
-        }
-        else {
-            len = doc1.length();
-            str1 = doc1;
-            str2 = doc2;
-        }
-        int index = 1;
-        for (int i = 0; i < len; i++) {
-            if (i + index < len) {
-                String curr = str1.substring(i, i + index);
-                if (str2.contains(curr)) {
-                    index++;
+        // Loop through both strings (index at 1 because 0 is reserved)
+        for (int i = 1; i <= doc1.length(); i++) {
+            for (int j = 1; j <= doc2.length(); j++) {
+                // If the characters are equal
+                if (doc1.charAt(i - 1) == doc2.charAt(j - 1)) {
+                    // Diagonal + 1 in array
+                    tab[i][j] = tab[i - 1][j - 1] + 1;
                 }
+                // If they are not equal
                 else {
-                    index = 0;
+                    // Get the max of the left square and square above
+                    tab[i][j] = Math.max(tab[i - 1][j], tab[i][j - 1]);
                 }
             }
-
         }
-        return index;
+        // Return bottom right square
+        return tab[doc1.length()][doc2.length()];
     }
 }
